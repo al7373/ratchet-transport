@@ -156,7 +156,7 @@ class RatchetTransportProvider extends AbstractRouterTransportProvider implement
      */
     public function onPong(ConnectionInterface $from, Frame $frame)
     {
-        $transport = $this->sessions[$from];
+        $transport = $this->sessions[$from]->getTransport();
 
         if (method_exists($transport, 'onPong')) {
             $transport->onPong($frame);
