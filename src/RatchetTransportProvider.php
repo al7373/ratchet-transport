@@ -3,6 +3,7 @@
 namespace Thruway\Transport;
 
 use Ratchet\RFC6455\Messaging\Frame;
+use Ratchet\RFC6455\Messaging\FrameInterface;
 use React\EventLoop\LoopInterface;
 use Thruway\Event\ConnectionCloseEvent;
 use Thruway\Event\ConnectionOpenEvent;
@@ -65,6 +66,7 @@ class RatchetTransportProvider extends AbstractRouterTransportProvider implement
         $this->address  = $address;
         $this->sessions = new \SplObjectStorage();
         $this->ws       = new WsServer($this);
+        $this->enableHandleOnPong();
     }
 
     /**
@@ -193,5 +195,13 @@ class RatchetTransportProvider extends AbstractRouterTransportProvider implement
           "router.start" => ["handleRouterStart", 10],
           "router.stop"  => ["handleRouterStop", 10]
         ];
+    }
+
+    private function enableHandleOnPong()
+    {
+      $handleOnPong = function(FrameInterface $frame, $conn){
+        $this->onPong($conn, $frame);
+      }
+      $this->ws->setHandleOnPong($handleOnPong);
     }
 }
