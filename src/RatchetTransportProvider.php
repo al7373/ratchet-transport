@@ -201,7 +201,7 @@ class RatchetTransportProvider extends AbstractRouterTransportProvider implement
     {
       $handleOnPong = function(FrameInterface $frame, $conn){
         $this->onPong($conn, $frame);
-      }
+      };
       $this->ws->setHandleOnPong($handleOnPong);
     }
 }
